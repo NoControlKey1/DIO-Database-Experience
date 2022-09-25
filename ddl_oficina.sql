@@ -14,10 +14,10 @@ CONSTRAINT pk_cliente PRIMARY KEY (cpf)
 
 CREATE TABLE IF NOT EXISTS veiculo(
 placa CHAR(7),
-cpfCliente CHAR(11),
+cpfCliente CHAR(11) NOT NULL,
 modelo VARCHAR(30) NOT NULL,
-marca VARCHAR(30),
-ano CHAR(4),
+marca VARCHAR(30) NOT NULL,
+ano CHAR(4) NOT NULL,
 PRIMARY KEY (placa),
 CONSTRAINT fk_veiculo FOREIGN KEY (cpfCliente) REFERENCES cliente(cpf)
 );
@@ -55,10 +55,10 @@ FOREIGN KEY (mecanico) REFERENCES mecanico(nome)
 
 CREATE TABLE IF NOT EXISTS pedido(
 id MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-cpfCliente CHAR(11),
-placaVeiculo CHAR(7),
+cpfCliente CHAR(11) NOT NULL,
+placaVeiculo CHAR(7) NOT NULL,
 idEquipe TINYINT UNSIGNED,
-tipoRequisicao VARCHAR(45),
+tipoRequisicao VARCHAR(45) NOT NULL,
 FOREIGN KEY (cpfCliente) REFERENCES cliente(cpf),
 FOREIGN KEY (placaVeiculo) REFERENCES veiculo(placa),
 FOREIGN KEY (idEquipe) REFERENCES equipe(id)
@@ -66,12 +66,11 @@ FOREIGN KEY (idEquipe) REFERENCES equipe(id)
 
 CREATE TABLE IF NOT EXISTS ordemDeServico(
 id MEDIUMINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-idEquipe TINYINT UNSIGNED,
-idPedido MEDIUMINT UNSIGNED,
-dataEntrega DATE,
-dataEmissao DATE,
-valor FLOAT,
-status VARCHAR(45),
+idEquipe TINYINT UNSIGNED NOT NULL,
+idPedido MEDIUMINT UNSIGNED NOT NULL,
+dataEntrega DATE NOT NULL,
+dataEmissao DATE NOT NULL,
+valor FLOAT NOT NULL,
 FOREIGN KEY (idEquipe) REFERENCES equipe(id),
 FOREIGN KEY (idPedido) REFERENCES pedido(id)
 );
@@ -80,17 +79,17 @@ ALTER TABLE ordemDeServico ADD CHECK (dataEmissao <= dataEntrega);
 
 CREATE TABLE IF NOT EXISTS servico(
 id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(45),
-descricao VARCHAR(45),
-valor FLOAT,
+nome VARCHAR(45) NOT NULL,
+descricao VARCHAR(45) NOT NULL,
+valor FLOAT NOT NULL,
 CHECK (valor>=0)
 );
 
 CREATE TABLE IF NOT EXISTS servico_ordemDeServico(
 idOrdemDeServico MEDIUMINT UNSIGNED,
 idServico TINYINT UNSIGNED,
-quantidade TINYINT UNSIGNED,
-valor FLOAT,
+quantidade TINYINT UNSIGNED NOT NULL,
+valor FLOAT NOT NULL,
 autorizado CHAR(3),
 PRIMARY KEY (idOrdemDeServico, idServico),
 FOREIGN KEY (idOrdemDeServico) REFERENCES ordemDeServico(id),
